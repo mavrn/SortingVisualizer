@@ -33,14 +33,13 @@ class Values:
     sfx = [(0.0, 0.0), (0.11, 0.0), (0.23, 0.64), (0.34, 0.0), (0.47, 0.0)]
 
 
-# working: ursfx([(0.0, 0.0), (0.11, 0.0), (0.23, 0.64), (0.34, 0.0), (0.47, 0.0)], volume=0.75, wave='triangle', pitch=pitch, speed=1.0)
-
-
 def sfx(i):
+    # this import didn't work any other way
     from ursina.prefabs.ursfx import ursfx
     if Values.muted:
         return
     pitch = (i / Values.array_size) * 25 - 4
+    # having sounds enabled slows the program down to about 25%
     ursfx(Values.sfx, volume=0.75, wave='triangle', pitch=pitch, speed=0.9)
 
 
@@ -48,18 +47,18 @@ def sfx(i):
 ############################# SORTING ALGORITHMS #####################################
 ######################################################################################
 
-def bubbleSort():
+def bubble_sort():
     for i in range(Values.array_size - 1):
         for j in range(Values.array_size - i - 1):
-            sfx(Values.array[j+1])
+            sfx(Values.array[j + 1])
             Values.comparisons += 1
-            for _ in range(Values.delay+1):
-                yield j, j+1
+            for _ in range(Values.delay + 1):
+                yield j, j + 1
             if Values.array[j] > Values.array[j + 1]:
                 Values.array[j], Values.array[j + 1] = Values.array[j + 1], Values.array[j]
 
 
-def insertionSort():
+def insertion_sort():
     for i in range(1, len(Values.array)):
         key = Values.array[i]
         j = i - 1
@@ -67,13 +66,13 @@ def insertionSort():
             Values.comparisons += 1
             Values.array[j + 1] = Values.array[j]
             j -= 1
-            sfx(Values.array[j+1])
-            for _ in range(Values.delay+1):
-                yield i, j+1
+            sfx(Values.array[j + 1])
+            for _ in range(Values.delay + 1):
+                yield i, j + 1
         Values.array[j + 1] = key
 
 
-def selectionSort():
+def selection_sort():
     for i in range(Values.array_size):
         min_idx = i
         for j in range(i + 1, Values.array_size):
@@ -93,7 +92,7 @@ def selectionSort():
 
 # Note: Merge sort, heap sort and quick sort algorithms are iterative versions, as recursive algorithms don't work
 # with the generator approach I took in this project
-def mergeSort():
+def merge_sort():
     low = 0
     high = Values.array_size - 1
     temp = Values.array.copy()
@@ -135,7 +134,7 @@ def mergeSort():
         m *= 2
 
 
-def heapSort():
+def heap_sort():
     for i in range(Values.array_size):
         if Values.array[i] > Values.array[int((i - 1) / 2)]:
             Values.comparisons += 1
@@ -176,7 +175,7 @@ def heapSort():
                 break
 
 
-def quickSort():
+def quick_sort():
     arr = Values.array
     l = 0
     h = Values.array_size - 1
@@ -206,7 +205,7 @@ def quickSort():
                 sfx(Values.array[i])
                 for _ in range(Values.delay + 1):
                     yield i, j
-        sfx(Values.array[i+1])
+        sfx(Values.array[i + 1])
         for _ in range(Values.delay + 1):
             yield i + 1, h
         arr[i + 1], arr[h] = arr[h], arr[i + 1]
@@ -364,6 +363,7 @@ def mark_button():
             button.color = NormalButton.BUTTON_COLOR
     Values.marked_button.color = NormalButton.BUTTON_MARKED
 
+
 def toggle_sound():
     if Values.muted:
         Values.muted = False
@@ -425,7 +425,7 @@ def update():
 
 
 def init():
-    set_sorting_algorithm(bubbleSort)
+    set_sorting_algorithm(bubble_sort)
     Values.array = new_array()
     draw_array()
     Text.size = 0.03
@@ -485,7 +485,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(-2.5, 3.4),
-        algorithm=bubbleSort,
+        algorithm=bubble_sort,
         text_entity=VisText(
             text="Bubble Sort",
             pos=(-0.365, 0.425),
@@ -496,7 +496,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(-1.2, 3.4),
-        algorithm=insertionSort,
+        algorithm=insertion_sort,
         text_entity=VisText(
             text="Insertion Sort",
             pos=(-0.212, 0.425),
@@ -507,7 +507,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(0.1, 3.4),
-        algorithm=selectionSort,
+        algorithm=selection_sort,
         text_entity=VisText(
             text="Selection Sort",
             pos=(-0.055, 0.425),
@@ -518,7 +518,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(1.4, 3.4),
-        algorithm=mergeSort,
+        algorithm=merge_sort,
         text_entity=VisText(
             text="Merge Sort",
             pos=(0.115, 0.425),
@@ -529,7 +529,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(2.7, 3.4),
-        algorithm=heapSort,
+        algorithm=heap_sort,
         text_entity=VisText(
             text="Heap Sort",
             pos=(0.28, 0.425),
@@ -540,7 +540,7 @@ def init():
     Values.buttons.append(AlgorithmButton(
         scale=(1.2, 0.35),
         position=(4, 3.4),
-        algorithm=quickSort,
+        algorithm=quick_sort,
         text_entity=VisText(
             text="Quick Sort",
             pos=(0.435, 0.425),
@@ -584,7 +584,8 @@ def main():
     init()
     destroy(window.exit_button)
     window.exit_button.enabled = False
-    sfx(10000)
+    # this is to avoid lag when first playing any sound (as an import happens in the sfx() function)
+    sfx(0)
     app.run()
 
 
