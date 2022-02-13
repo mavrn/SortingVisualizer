@@ -2,16 +2,15 @@
 
 **Installation:**<br>
 There are two ways to run the program:
-- Download ursina and numpy as mentioned in requirements.txt. Then, download/clone the source code and run main.py
-- Download a release; this will be a bit slower though
+- Install ursina and numpy as mentioned in requirements.txt. Then, download/clone the source code and run main.py with Python 3.9+. 
+- Download Sorting Visualizer.rar from the release section, unpack the archive and run Sorting Visualizer.bat. 
 
+Having sounds enabled will slow down the sorting process by ~100%. Running the program with the second method (Ursina build) will avoid this.
 
-**Demo:** to be added later
+**Demo:** https://www.youtube.com/watch?v=NLvAuLL2dWY
 
 **GUI:**
 ![](assets/demo_ui.png)
-
-**Important note: Having sounds enabled will slow the sorting process down to about ~25%.**
 
 **Available algorithms:**
 - Bubble sort
